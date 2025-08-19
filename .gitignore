@@ -1,0 +1,122 @@
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Tools pulled down during build
+.tools/
+.dotnet/
+.packages/
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Visual Studio cache
+.vs/
+
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*_i.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+*.nupkg
+*.dotCover
+*.coverage
+*.coveragexml
+
+# Publish / deployment
+*.pubxml
+*.publishproj
+PublishScripts/
+wwwroot/build/
+wwwroot/dist/
+
+# Sensitive data
+*.pfx
+*.env
+*.env.*
+*.dbmdl
+*.mdf
+*.ldf
+*.ndf
+
+# NuGet
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Node modules
+node_modules/
+
+# Package manager files
+.pnpm-store/
+.yarn/
+yarn.lock
+pnpm-lock.yaml
+package-lock.json
+
+# React/Vite specific
+.vite/
+vite.config.js.timestamp-*
+
+# Production build
+build/
+dist/
+dist-ssr/
+
+# Testing / coverage
+coverage/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Misc
+.DS_Store
+.tailwindcache/
+*.tsbuildinfo
