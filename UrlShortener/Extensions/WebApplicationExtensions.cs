@@ -1,7 +1,18 @@
-﻿namespace UrlShortener.Extensions;
+﻿using DotNetEnv;
+
+namespace UrlShortener.Extensions;
 
 public static class WebApplicationExtensions
 {
+    /// <summary>
+    /// Loads environment variables from a .env.
+    /// </summary>
+    public static void LoadEnvironmentVariables(this WebApplicationBuilder builder)
+    {
+        Env.Load();
+        builder.Configuration.AddEnvironmentVariables();
+    }
+
     public static WebApplication ConfigureApplication(this WebApplication app)
     {
         return app
