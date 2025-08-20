@@ -1,5 +1,5 @@
-﻿using System;
-using UrlShortener.Data.Repositories;
+﻿using UrlShortener.Data.Repositories;
+using UrlShortener.Exceptions;
 using UrlShortener.Models.DTOs.Url;
 using UrlShortener.Models.Entities;
 using UrlShortener.Services.Url.Generators;
@@ -7,7 +7,7 @@ using UrlShortener.Services.Url.Generators;
 namespace UrlShortener.Services.Url.Core;
 
 public class ShortUrlService(
-    ShortUrlRepository shortUrlRepository,
+    IShortUrlRepository shortUrlRepository,
     IShortCodeGenerator shortCodeGenerator
     ) : IShortUrlService
 {
@@ -54,7 +54,7 @@ public class ShortUrlService(
     {
         if (await shortUrlRepository.OriginalUrlExistsAsync(dto.OriginalUrl))
         {
-            throw new InvalidOperationException("URL already exists");
+            throw new UrlAlreadyExistsException(dto.OriginalUrl);
         }
 
         var shortCode = await shortCodeGenerator.GenerateAsync(dto.OriginalUrl);
@@ -81,7 +81,7 @@ public class ShortUrlService(
     /// <summary>
     /// Deletes a short URL with authorization validation.
     /// </summary>
-    public async Task<bool> DeleteAsync(
+    public async Task DeleteAsync(
         long id,
         string userId,
         bool isAdmin)
@@ -89,12 +89,15 @@ public class ShortUrlService(
         var url = await shortUrlRepository.GetByIdAsync(id);
 
         if (url == null)
-            return false;
+        {
+            throw new UrlNotFoundException(id);
+        }
 
         if (!isAdmin && url.CreatedById != userId)
-            return false;
+        {
+            throw new UnauthorizedUrlAccessException(id);
+        }
 
         await shortUrlRepository.DeleteAsync(url);
-        return true;
     }
 }

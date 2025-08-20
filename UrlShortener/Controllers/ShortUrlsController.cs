@@ -10,7 +10,7 @@ namespace UrlShortener.Controllers;
 
 [ApiController]
 [Route("api/shorturls")]
-[Authorize]
+[Produces("application/json")]
 public class ShortUrlsController(
     IShortUrlService urlService,
     ILogger<ShortUrlsController> logger,
@@ -97,7 +97,7 @@ public class ShortUrlsController(
     /// <param name="id">The ID of the short URL to delete</param>
     /// <returns>An action result indicating successful deletion</returns>
     [HttpDelete("{id:long}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -109,12 +109,7 @@ public class ShortUrlsController(
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
         var isAdmin = User.IsInRole(identityConfig.AdminRole);
 
-        var success = await urlService.DeleteAsync(id, userId, isAdmin);
-
-        if (!success)
-        {
-            return NotFound($"Url with ID {id} not found");
-        }
+        await urlService.DeleteAsync(id, userId, isAdmin);
 
         logger.LogInformation(
             "Short url with ID {UrlId} successfully deleted by user with ID {UserId}",

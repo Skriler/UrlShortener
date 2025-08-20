@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  test:
+    environment: ci
+    runs-on: ubuntu-latest
+    name: Run Tests
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0"
+
+      - name: Restore dependencies
+        run: dotnet restore UrlShortener.sln
+
+      - name: Build
+        run: dotnet build UrlShortener.sln --no-restore --configuration Release
+
+      - name: Run Unit Tests
+        run: dotnet test UrlShortener.Unit/UrlShortener.Unit.csproj --configuration Release

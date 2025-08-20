@@ -7,6 +7,7 @@ using System.Text;
 using UrlShortener.Data;
 using UrlShortener.Data.Repositories;
 using UrlShortener.Data.Seeders;
+using UrlShortener.Pipeline;
 using UrlShortener.Models.Configuration;
 using UrlShortener.Models.Configuration.Seeding;
 using UrlShortener.Models.Entities;
@@ -28,7 +29,7 @@ public static class ServiceCollectionExtensions
         services
             .ConfigureDatabase(configuration)
             .ConfigureSecurityServices(configuration)
-            .AddControllersAndSwagger()
+            .AddWebAndApiServices()
             .AddApplicationServices();
 
         return services;
@@ -115,6 +116,8 @@ public static class ServiceCollectionExtensions
             {
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
+                ValidateIssuer = false,
+                ValidateAudience = false,
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(jwtConfig.Secret))
             };
@@ -124,13 +127,14 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Registers MVC and API controllers along with related services.
+    /// Registers controllers, Swagger, and global exception handling.
     /// </summary>
-    private static IServiceCollection AddControllersAndSwagger(this IServiceCollection services)
+    private static IServiceCollection AddWebAndApiServices(this IServiceCollection services)
     {
         services
             .AddSwaggerGen()
-            .AddControllersWithViews();
+            .AddControllersWithViews()
+            .AddUrlShortenerExceptionFilter();
 
         return services;
     }
@@ -151,7 +155,7 @@ public static class ServiceCollectionExtensions
         return services
             .AddScoped<IdentitySeeder>()
             .AddScoped<UrlSeeder>()
-            .AddScoped<ShortUrlRepository>();
+            .AddScoped<IShortUrlRepository, ShortUrlRepository>();
     }
 
     /// <summary>

@@ -1,6 +1,6 @@
 ﻿using DotNetEnv;
 using UrlShortener.Data.Seeders;
-using UrlShortener.Middlewares;
+using UrlShortener.Pipeline;
 
 namespace UrlShortener.Extensions;
 
@@ -27,6 +27,7 @@ public static class WebApplicationExtensions
     /// </summary>
     private static WebApplication ConfigureMiddleware(this WebApplication app)
     {
+        app.UseErrorHandlingMiddleware();
         ConfigureSwagger(app);
 
         if (!app.Environment.IsDevelopment())
@@ -34,8 +35,7 @@ public static class WebApplicationExtensions
             app.UseHsts();
         }
 
-        app.UseErrorHandlingMiddleware()
-            .UseHttpsRedirection()
+        app.UseHttpsRedirection()
             .UseRouting()
             .UseAuthentication()
             .UseAuthorization();

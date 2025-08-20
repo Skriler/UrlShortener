@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using UrlShortener.Models.DTOs.Auth;
 using UrlShortener.Services.Auth.Core;

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace UrlShortener.Middlewares;
+namespace UrlShortener.Pipeline;
 
 /// <summary>
 /// Middleware for global error handling in the application.
@@ -57,7 +57,7 @@ public class ErrorHandlingMiddleware(
     }
 }
 
-public static class ErrorHandlingExtensions
+public static partial class ErrorHandlingExtensions
 {
     /// <summary>
     /// Extension method for adding ErrorHandlingMiddleware to the application's request pipeline.

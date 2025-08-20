@@ -3,7 +3,9 @@ using UrlShortener.Models.Entities;
 
 namespace UrlShortener.Data.Repositories;
 
-public class ShortUrlRepository(UrlShortenerDbContext context)
+public class ShortUrlRepository(
+    UrlShortenerDbContext context
+    ) : IShortUrlRepository
 {
     /// <summary>
     /// Checks if a short code already exists in the db.
