@@ -11,4 +11,6 @@ public interface IShortUrlService
     Task<ShortUrlDto> CreateAsync(CreateUrlDto dto, string userId);
 
     Task DeleteAsync(long id, string userId, bool isAdmin);
+
+    Task<string?> GetOriginalUrlByShortCodeAsync(string shortCode);
 }

@@ -36,6 +36,7 @@ public static class WebApplicationExtensions
         }
 
         app.UseHttpsRedirection()
+            .UseStaticFiles()
             .UseRouting()
             .UseAuthentication()
             .UseAuthorization();
@@ -50,12 +51,14 @@ public static class WebApplicationExtensions
     /// </summary>
     private static WebApplication ConfigureRouting(this WebApplication app)
     {
+        app.MapControllers();
+        app.MapRazorPages();
+
         app.MapControllerRoute(
             name: "redirect",
             pattern: "{shortCode}",
             defaults: new { controller = "Redirect", action = "Index" });
 
-        app.MapControllers();
         app.MapFallbackToFile("index.html");
 
         return app;

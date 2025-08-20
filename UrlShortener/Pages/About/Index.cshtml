@@ -1,0 +1,40 @@
+﻿@page
+@model UrlShortener.Pages.About.IndexModel
+@{
+    ViewData["Title"] = "About - URL Shortener";
+}
+
+<div class="container">
+    <h2>About URL Shortener</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (Model.IsAdmin)
+    {
+        <form method="post">
+            <div class="form-group mb-3">
+                <label asp-for="AboutContent">Algorithm Description:</label>
+                <textarea asp-for="AboutContent" class="form-control" rows="20" required></textarea>
+                <span asp-validation-for="AboutContent" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Content</button>
+        </form>
+    }
+    else
+    {
+        <div class="content">
+            @Html.Raw(Html.Encode(Model.AboutContent).Replace("\n", "<br/>"))
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

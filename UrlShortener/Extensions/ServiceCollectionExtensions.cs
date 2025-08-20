@@ -131,9 +131,10 @@ public static class ServiceCollectionExtensions
     /// </summary>
     private static IServiceCollection AddWebAndApiServices(this IServiceCollection services)
     {
+        services.AddRazorPages();
         services
             .AddSwaggerGen()
-            .AddControllersWithViews()
+            .AddControllers()
             .AddUrlShortenerExceptionFilter();
 
         return services;
@@ -155,7 +156,8 @@ public static class ServiceCollectionExtensions
         return services
             .AddScoped<IdentitySeeder>()
             .AddScoped<UrlSeeder>()
-            .AddScoped<IShortUrlRepository, ShortUrlRepository>();
+            .AddScoped<IShortUrlRepository, ShortUrlRepository>()
+            .AddScoped<IAboutContentRepository, AboutContentRepository>();
     }
 
     /// <summary>

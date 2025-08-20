@@ -100,4 +100,14 @@ public class ShortUrlService(
 
         await shortUrlRepository.DeleteAsync(url);
     }
+
+    /// <summary>
+    /// Retrieves the original URL by short code for redirection.
+    /// </summary>
+    public async Task<string?> GetOriginalUrlByShortCodeAsync(string shortCode)
+    {
+        var url = await shortUrlRepository.GetByShortCodeAsync(shortCode);
+
+        return url?.OriginalUrl;
+    }
 }
