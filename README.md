@@ -14,7 +14,7 @@ URL shortening service built with **ASP.NET Core** and **Entity Framework**, fea
 1. **Clone and navigate to project**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Skriler/UrlShortener
    cd UrlShortener
    ```
 
@@ -41,8 +41,8 @@ URL shortening service built with **ASP.NET Core** and **Entity Framework**, fea
    ```
 
 4. **Access application**
-   - API: `https://localhost:7001`
-   - Swagger: `https://localhost:7001/swagger`
+   - API: `https://localhost:44318`
+   - Swagger: `https://localhost:44318/swagger`
 
 ## 🛠 Tech Stack
 
