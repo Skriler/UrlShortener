@@ -2,7 +2,7 @@
 
 public record JwtConfig
 {
-    public string Secret { get; set; } = string.Empty;
+    public string Secret { get; init; } = string.Empty;
 
-    public int ExpirationMinutes { get; set; }
+    public int ExpirationMinutes { get; init; }
 }

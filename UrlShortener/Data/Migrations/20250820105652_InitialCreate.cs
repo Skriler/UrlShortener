@@ -180,7 +180,7 @@ namespace UrlShortener.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ShortenedUrls",
+                name: "ShortUrls",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -192,9 +192,9 @@ namespace UrlShortener.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShortenedUrls", x => x.Id);
+                    table.PrimaryKey("PK_ShortUrls", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ShortenedUrls_AspNetUsers_CreatedById",
+                        name: "FK_ShortUrls_AspNetUsers_CreatedById",
                         column: x => x.CreatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -246,8 +246,8 @@ namespace UrlShortener.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShortenedUrls_CreatedById",
-                table: "ShortenedUrls",
+                name: "IX_ShortUrls_CreatedById",
+                table: "ShortUrls",
                 column: "CreatedById");
         }
 
@@ -273,7 +273,7 @@ namespace UrlShortener.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "ShortenedUrls");
+                name: "ShortUrls");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -12,7 +12,7 @@ using UrlShortener.Data;
 namespace UrlShortener.Data.Migrations
 {
     [DbContext(typeof(UrlShortenerDbContext))]
-    [Migration("20250819224653_InitialCreate")]
+    [Migration("20250820105652_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -286,7 +286,7 @@ namespace UrlShortener.Data.Migrations
 
                     b.HasIndex("CreatedById");
 
-                    b.ToTable("ShortenedUrls");
+                    b.ToTable("ShortUrls");
                 });
 
             modelBuilder.Entity("UrlShortener.Models.Entities.ApplicationUser", b =>

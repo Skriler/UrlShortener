@@ -9,4 +9,6 @@ var app = builder.Build();
 
 app.ConfigureApplication();
 
+await app.InitializeDatabaseAsync();
+
 app.Run();

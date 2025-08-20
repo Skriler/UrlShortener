@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
+using UrlShortener.Models.Configuration;
 using UrlShortener.Models.DTOs.Auth;
 using UrlShortener.Models.Entities;
 using UrlShortener.Services.Auth.Generators;
@@ -8,13 +10,13 @@ namespace UrlShortener.Services.Auth.Core;
 
 public class AuthService(
     UserManager<ApplicationUser> userManager,
-    IJwtTokenGenerator jwtTokenGenerator
+    IJwtTokenGenerator jwtTokenGenerator,
+    IOptions<IdentityConfig> identityConfigOptions
     ) : IAuthService
 {
     private readonly UserManager<ApplicationUser> userManager = userManager;
     private readonly IJwtTokenGenerator jwtTokenGenerator = jwtTokenGenerator;
-
-    private const string DefaultUserRole = "User";
+    private readonly IdentityConfig identityConfig = identityConfigOptions.Value;
 
     /// <summary>
     /// Authenticates the user by validating their credentials
@@ -30,7 +32,7 @@ public class AuthService(
         }
 
         var userRoles = await userManager.GetRolesAsync(user);
-        var userRole = userRoles.FirstOrDefault() ?? DefaultUserRole; // TODO: replace with Identity Default
+        var userRole = userRoles.FirstOrDefault() ?? identityConfig.DefaultRole;
 
         var token = jwtTokenGenerator.Generate(user, userRole);
 

@@ -1,12 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace UrlShortener.Models.Configuration;
+﻿namespace UrlShortener.Models.Configuration;
 
 public record IdentityConfig
 {
-    public bool PasswordRequireDigit { get; set; }
+    public bool PasswordRequireDigit { get; init; }
 
-    public int PasswordRequiredLength { get; set; }
+    public int PasswordRequiredLength { get; init; }
 
-    public bool SignInRequireConfirmedAccount { get; set; }
+    public bool SignInRequireConfirmedAccount { get; init; }
+
+    public List<string> Roles { get; init; } = default!;
+
+    public string AdminRole { get; init; } = string.Empty;
+
+    public string DefaultRole { get; init; } = string.Empty;
 }

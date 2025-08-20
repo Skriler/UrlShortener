@@ -1,4 +1,6 @@
 ﻿using DotNetEnv;
+using UrlShortener.Data.Seeders;
+using UrlShortener.Middlewares;
 
 namespace UrlShortener.Extensions;
 
@@ -20,22 +22,32 @@ public static class WebApplicationExtensions
             .ConfigureRouting();
     }
 
+    /// <summary>
+    /// Configures the application middleware pipeline.
+    /// </summary>
     private static WebApplication ConfigureMiddleware(this WebApplication app)
     {
+        ConfigureSwagger(app);
+
         if (!app.Environment.IsDevelopment())
         {
             app.UseHsts();
         }
 
-        app.UseHttpsRedirection();
-        app.UseRouting();
-        app.UseAuthentication();
-        app.UseAuthorization();
+        app.UseErrorHandlingMiddleware()
+            .UseHttpsRedirection()
+            .UseRouting()
+            .UseAuthentication()
+            .UseAuthorization();
+
         app.MapStaticAssets();
 
         return app;
     }
 
+    /// <summary>
+    /// Configures the application routing.
+    /// </summary>
     private static WebApplication ConfigureRouting(this WebApplication app)
     {
         app.MapControllerRoute(
@@ -45,6 +57,36 @@ public static class WebApplicationExtensions
 
         app.MapControllers();
         app.MapFallbackToFile("index.html");
+
+        return app;
+    }
+
+    /// <summary>
+    /// Configures swagger.
+    /// </summary>
+    private static void ConfigureSwagger(WebApplication app)
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI(opt =>
+        {
+            opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Url Shortener v1");
+            opt.RoutePrefix = "swagger";
+        });
+    }
+
+    /// <summary>
+    /// Initializes the database with seed data.
+    /// </summary>
+    public static async Task<IApplicationBuilder> InitializeDatabaseAsync(this IApplicationBuilder app)
+    {
+        using (var scope = app.ApplicationServices.CreateScope())
+        {
+            var identitySeeder = scope.ServiceProvider.GetRequiredService<IdentitySeeder>();
+            var urlSeeder = scope.ServiceProvider.GetRequiredService<UrlSeeder>();
+
+            await identitySeeder.SeedAsync();
+            await urlSeeder.SeedAsync();
+        }
 
         return app;
     }

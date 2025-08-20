@@ -283,7 +283,7 @@ namespace UrlShortener.Data.Migrations
 
                     b.HasIndex("CreatedById");
 
-                    b.ToTable("ShortenedUrls");
+                    b.ToTable("ShortUrls");
                 });
 
             modelBuilder.Entity("UrlShortener.Models.Entities.ApplicationUser", b =>

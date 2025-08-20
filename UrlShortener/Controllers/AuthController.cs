@@ -8,7 +8,7 @@ using UrlShortener.Services.Auth.Core;
 namespace UrlShortener.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 [Produces("application/json")]
 public class AuthController(
     IAuthService authService,
@@ -47,7 +47,7 @@ public class AuthController(
     }
 
     /// <summary>
-    /// Get the current user info.
+    /// Gets the current user info.
     /// </summary>
     /// <returns>An action result containing сurrent user details</returns>
     [HttpGet("me")]

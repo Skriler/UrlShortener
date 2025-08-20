@@ -7,7 +7,7 @@ public class UrlShortenerDbContext(
     DbContextOptions<UrlShortenerDbContext> options
     ) : IdentityDbContext(options)
 {
-    public DbSet<ShortUrl> ShortenedUrls { get; set; }
+    public DbSet<ShortUrl> ShortUrls { get; set; }
 
     public DbSet<AboutContent> AboutContent { get; set; }
 

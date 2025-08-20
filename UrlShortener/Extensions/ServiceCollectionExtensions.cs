@@ -5,28 +5,31 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using UrlShortener.Data;
+using UrlShortener.Data.Repositories;
+using UrlShortener.Data.Seeders;
 using UrlShortener.Models.Configuration;
+using UrlShortener.Models.Configuration.Seeding;
 using UrlShortener.Models.Entities;
 using UrlShortener.Services.Auth;
 using UrlShortener.Services.Auth.Core;
 using UrlShortener.Services.Auth.Generators;
+using UrlShortener.Services.Url.Core;
+using UrlShortener.Services.Url.Generators;
 
 namespace UrlShortener.Extensions;
 
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Configures all services for the application.
+    /// Configures all application services (DB, security, domain services).
     /// </summary>
     public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services
             .ConfigureDatabase(configuration)
-            .ConfigureSecurityServices(configuration);
-
-
-        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-        services.AddScoped<IAuthService, AuthService>();
+            .ConfigureSecurityServices(configuration)
+            .AddControllersAndSwagger()
+            .AddApplicationServices();
 
         return services;
     }
@@ -54,7 +57,7 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Configures all security services including Identity and JWT authentication
+    /// Configures all security services including Identity and JWT authentication.
     /// </summary>
     public static IServiceCollection ConfigureSecurityServices(
         this IServiceCollection services,
@@ -68,13 +71,15 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Configures ASP.NET Core Identity
+    /// Configures ASP.NET Core Identity.
     /// </summary>
     private static IServiceCollection ConfigureIdentityServices(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var identityConfig = configuration.GetSection("Identity").Get<IdentityConfig>()!;
+        services.Configure<IdentityConfig>(configuration.GetSection("IdentityConfig"));
+        services.Configure<SeedingConfig>(configuration.GetSection("SeedingConfig"));
+        var identityConfig = configuration.GetSection("IdentityConfig").Get<IdentityConfig>()!;
 
         services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         {
@@ -89,7 +94,7 @@ public static class ServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Configures JWT Bearer authentication
+    /// Configures JWT Bearer authentication.
     /// </summary>
     private static IServiceCollection ConfigureJwtAuthentication(
         this IServiceCollection services,
@@ -116,5 +121,56 @@ public static class ServiceCollectionExtensions
         });
 
         return services;
+    }
+
+    /// <summary>
+    /// Registers MVC and API controllers along with related services.
+    /// </summary>
+    private static IServiceCollection AddControllersAndSwagger(this IServiceCollection services)
+    {
+        services
+            .AddSwaggerGen()
+            .AddControllersWithViews();
+
+        return services;
+    }
+
+    /// <summary>
+    /// Registers application-level domain services.
+    /// </summary>
+    private static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    {
+        return services
+            .AddDataServices()
+            .AddAuthServices()
+            .AddUrlsServices();
+    }
+
+    private static IServiceCollection AddDataServices(this IServiceCollection services)
+    {
+        return services
+            .AddScoped<IdentitySeeder>()
+            .AddScoped<UrlSeeder>()
+            .AddScoped<ShortUrlRepository>();
+    }
+
+    /// <summary>
+    /// Registers auth-related domain services.
+    /// </summary>
+    private static IServiceCollection AddAuthServices(this IServiceCollection services)
+    {
+        return services
+            .AddScoped<IJwtTokenGenerator, JwtTokenGenerator>()
+            .AddScoped<IAuthService, AuthService>();
+    }
+
+    /// <summary>
+    /// Registers URL related domain services.
+    /// </summary>
+    private static IServiceCollection AddUrlsServices(this IServiceCollection services)
+    {
+         return services
+            .AddScoped<IShortCodeGenerator, ShortCodeGenerator>()
+            .AddScoped<IShortUrlService, ShortUrlService>();
     }
 }
